@@ -13,8 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
-
+@Getter @Setter
 public class Delivery {
     @Id
     @GeneratedValue
