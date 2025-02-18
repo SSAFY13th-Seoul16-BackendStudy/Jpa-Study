@@ -8,6 +8,7 @@ import com.japStudy.ssafyStudy.domain.Order;
 import com.japStudy.ssafyStudy.domain.OrderStatus;
 import com.japStudy.ssafyStudy.domain.item.Book;
 import com.japStudy.ssafyStudy.domain.item.Item;
+import com.japStudy.ssafyStudy.exception.NotEnoughStockException;
 import com.japStudy.ssafyStudy.repository.IOrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -60,6 +61,35 @@ public class OrderServiceTest {
         assertEquals(10000*2, getOrder.getTotalPrice());
         assertEquals(8, item.getStockQuantity());
 
+    }
+    @Test
+    public void 상품주문_재고수량초과() throws Exception{
+        //given
+        Member member = createMember();
+        Item item = createBook("JPA!",10000,10);
+
+        //when
+        int orderCount = 200;
+
+        //then
+        assertThrows(NotEnoughStockException.class, ()->{orderService.order(member.getId(), item.getId(), orderCount);});
+    }
+
+    @Test
+    public void 주문취소() throws Exception{
+        //given
+        Member member = createMember();
+        Item item = createBook("JPA!",10000,10);
+        int orderCount = 2;
+
+        Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
+        //when
+        orderService.cancelOrder(orderId);
+
+        //then
+        Order getOrder = orderRepository.findOne(orderId);
+        assertEquals(OrderStatus.CANCLE, getOrder.getStatus());
+        assertEquals(10,item.getStockQuantity());
     }
     private Member createMember() {
         Member member = new Member();
