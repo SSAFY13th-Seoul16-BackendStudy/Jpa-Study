@@ -20,7 +20,8 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+                                        // 해당 설정을 하지 않으면 org.hibernate.TransientObjectException 가 터짐
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member member;
 
