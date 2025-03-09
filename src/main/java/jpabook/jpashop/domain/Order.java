@@ -21,7 +21,7 @@ public class Order {
     private Long id;
 
                                         // 해당 설정을 하지 않으면 org.hibernate.TransientObjectException 가 터짐
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member member;
 
