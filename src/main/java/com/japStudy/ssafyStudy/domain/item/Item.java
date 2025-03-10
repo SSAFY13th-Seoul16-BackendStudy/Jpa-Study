@@ -34,7 +34,7 @@ public abstract class Item {
     private int stockQuantity;
 
     @ManyToMany(mappedBy = "items", fetch = LAZY)
-    private List<Category> categories = new ArrayList<Category>();
+    private List<Category> categories = new ArrayList<>();
 
     // 비즈니스 로직
     // 재고 증가
@@ -50,5 +50,4 @@ public abstract class Item {
         }
         this.stockQuantity = restStock;
     }
-
 }

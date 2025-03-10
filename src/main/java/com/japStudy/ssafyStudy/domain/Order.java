@@ -32,7 +32,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -79,7 +79,7 @@ public class Order {
     // 비즈니스 로직
 
     // - 주문 취소
-    public void cancle() {
+    public void cancel() {
         if (delivery.getStatus() == DeliveryStatus.COMP) {
             throw new IllegalStateException("이미 배송 완료된 상품은 취소 불가합니다.");
         }

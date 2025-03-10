@@ -1,7 +1,9 @@
 package com.japStudy.ssafyStudy.controller;
 
 import com.japStudy.ssafyStudy.domain.item.Book;
+import com.japStudy.ssafyStudy.domain.item.Item;
 import com.japStudy.ssafyStudy.service.ItemService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,34 +15,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
+
     private final ItemService itemService;
 
-    @GetMapping("items")
-    public String items(Model model) {
-        model.addAttribute("items", itemService.findItems());
-        return "items/itemList";
-    }
-
-    @GetMapping("items/new")
+    @GetMapping("/items/new")
     public String createForm(Model model) {
         model.addAttribute("form", new BookForm());
         return "items/createItemForm";
     }
 
-    @PostMapping("items/new")
-    public String creat(BookForm bookForm, Model model) {
+    @PostMapping("/items/new")
+    public String create(BookForm form) {
+
         Book book = new Book();
-        book.setName(bookForm.getName());
-        book.setPrice(bookForm.getPrice());
-        book.setStockQuantity(bookForm.getStockQuantity());
-        book.setAuthor(bookForm.getAuthor());
-        book.setIsbn(bookForm.getIsbn());
+        book.setName(form.getName());
+        book.setPrice(form.getPrice());
+        book.setStockQuantity(form.getStockQuantity());
+        book.setAuthor(form.getAuthor());
+        book.setIsbn(form.getIsbn());
 
         itemService.saveItem(book);
         return "redirect:/";
     }
+
+    @GetMapping("/items")
+    public String list(Model model) {
+        List<Item> items = itemService.findItems();
+        model.addAttribute("items", items);
+        return "items/itemList";
+    }
+
     @GetMapping("items/{itemId}/edit")
-    public String editForm(@PathVariable("itemId") long itemId, Model model) {
+    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
         Book item = (Book) itemService.findOne(itemId);
 
         BookForm form = new BookForm();
@@ -54,18 +60,16 @@ public class ItemController {
         model.addAttribute("form", form);
         return "items/updateItemForm";
     }
-    @PostMapping("items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form")BookForm bookForm, Model model) {
-        Book book = new Book();
-        book.setId(bookForm.getId());
-        book.setName(bookForm.getName());
-        book.setPrice(bookForm.getPrice());
-        book.setStockQuantity(bookForm.getStockQuantity());
-        book.setAuthor(bookForm.getAuthor());
-        book.setIsbn(bookForm.getIsbn());
 
-        itemService.saveItem(book);
+    @PostMapping("items/{itemId}/edit")
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
+
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
+
         return "redirect:/items";
-    
     }
 }
+
+
+
+

@@ -6,6 +6,6 @@ import java.util.List;
 public interface IOrderService {
     Long order(Long memberId, Long itemId, int count);
     void cancelOrder(Long orderId);
-//    List<Order> findOrders(OrderSearch orderSearch)
+    List<Order> findOrders(OrderSearch orderSearch);
 
 }

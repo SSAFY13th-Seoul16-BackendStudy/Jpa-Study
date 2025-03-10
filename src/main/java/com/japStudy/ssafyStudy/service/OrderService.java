@@ -9,13 +9,14 @@ import com.japStudy.ssafyStudy.domain.item.Item;
 import com.japStudy.ssafyStudy.repository.IItemRepository;
 import com.japStudy.ssafyStudy.repository.IMemberRepository;
 import com.japStudy.ssafyStudy.repository.IOrderRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class OrderService implements IOrderService {
     private final IMemberRepository memberRepository;
     private final IOrderRepository orderRepository;
@@ -31,9 +32,9 @@ public class OrderService implements IOrderService {
         delivery.setAddress(member.getAddress());
         delivery.setStatus(DeliveryStatus.READY);
 
-        OrderItem orderItem = OrderItem.createOrderItem(item,item.getPrice(),count);
+        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
-        Order order = Order.createOrder(member,delivery,orderItem);
+        Order order = Order.createOrder(member, delivery, orderItem);
 
         orderRepository.save(order);
         return order.getId();
@@ -43,6 +44,10 @@ public class OrderService implements IOrderService {
     @Transactional
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findOne(orderId);
-        order.cancle();
+        order.cancel();
+    } //검색
+
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
     }
 }

@@ -7,4 +7,5 @@ public interface IMemberService {
     Long join(Member member);
     List<Member> findMembers();
     Member findOne(Long memberId);
+    void update(Long id, String name);
 }

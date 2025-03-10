@@ -12,12 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ItemRepository implements IItemRepository {
     private final EntityManager em;
+
     @Override
     @Transactional(readOnly = true)
     public void save(Item item) {
-        if(item.getId()==null){
+        if (item.getId() == null) {
             em.persist(item);
-        }else{
+        } else {
             em.merge(item);
         }
     }
