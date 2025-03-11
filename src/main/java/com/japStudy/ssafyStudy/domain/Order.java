@@ -83,7 +83,7 @@ public class Order {
         if (delivery.getStatus() == DeliveryStatus.COMP) {
             throw new IllegalStateException("이미 배송 완료된 상품은 취소 불가합니다.");
         }
-        this.setStatus(OrderStatus.CANCLE);
+        this.setStatus(OrderStatus.CANCEL);
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }

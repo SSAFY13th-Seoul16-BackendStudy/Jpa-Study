@@ -9,6 +9,7 @@ import com.japStudy.ssafyStudy.domain.item.Item;
 import com.japStudy.ssafyStudy.repository.IItemRepository;
 import com.japStudy.ssafyStudy.repository.IMemberRepository;
 import com.japStudy.ssafyStudy.repository.IOrderRepository;
+import com.japStudy.ssafyStudy.repository.OrderSearch;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

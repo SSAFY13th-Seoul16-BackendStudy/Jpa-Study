@@ -88,7 +88,7 @@ public class OrderServiceTest {
 
         //then
         Order getOrder = orderRepository.findOne(orderId);
-        assertEquals(OrderStatus.CANCLE, getOrder.getStatus());
+        assertEquals(OrderStatus.CANCEL, getOrder.getStatus());
         assertEquals(10,item.getStockQuantity());
     }
     private Member createMember() {

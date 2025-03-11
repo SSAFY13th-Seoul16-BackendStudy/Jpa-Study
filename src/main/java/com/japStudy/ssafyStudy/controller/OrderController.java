@@ -2,8 +2,8 @@ package com.japStudy.ssafyStudy.controller;
 
 import com.japStudy.ssafyStudy.domain.Member;
 import com.japStudy.ssafyStudy.domain.Order;
-import com.japStudy.ssafyStudy.domain.OrderSearch;
 import com.japStudy.ssafyStudy.domain.item.Item;
+import com.japStudy.ssafyStudy.repository.OrderSearch;
 import com.japStudy.ssafyStudy.service.IItemService;
 import com.japStudy.ssafyStudy.service.IMemberService;
 import com.japStudy.ssafyStudy.service.IOrderService;

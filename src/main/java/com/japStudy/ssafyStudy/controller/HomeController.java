@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 //@ResponseBody
-@RestController
+//@RestController
 @Slf4j
 public class HomeController {
-    @CrossOrigin(origins = "http://localhost:8081")
+//    @CrossOrigin(origins = "http://localhost:8081")
     @RequestMapping("/")
     public String home() {
 

@@ -1,7 +1,6 @@
 package com.japStudy.ssafyStudy.repository;
 
 import com.japStudy.ssafyStudy.domain.Order;
-import com.japStudy.ssafyStudy.domain.OrderSearch;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
