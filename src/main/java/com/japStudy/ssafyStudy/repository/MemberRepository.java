@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MemberRepository implements IMemberRepository {
+public class MemberRepository implements IMemberRepositoryOld {
 
     @Autowired
     private EntityManager em;

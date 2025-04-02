@@ -1,6 +1,12 @@
 package com.japStudy.ssafyStudy.repository;
 
 import com.japStudy.ssafyStudy.domain.Order;
+import com.japStudy.ssafyStudy.domain.OrderStatus;
+import com.japStudy.ssafyStudy.domain.QMember;
+import com.japStudy.ssafyStudy.domain.QOrder;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
@@ -58,7 +64,35 @@ public class OrderRepository implements IOrderRepository {
         return query.getResultList();
     }
 
-//    public List<Order> findAllByCriteria(OrderSearch orderSearch) {
+    public List<Order> findAll(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEqual(orderSearch.getOrderStatus()),
+                        nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression nameLike(String memberName) {
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return QMember.member.name.like(memberName);
+    }
+
+    private BooleanExpression statusEqual(OrderStatus orderStatus) {
+        if (orderStatus == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(orderStatus);
+    }
+
+    //    public List<Order> findAllByCriteria(OrderSearch orderSearch) {
 //        CriteriaBuilder cb = em.getCriteriaBuilder();
 //        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
 //        Root<Order> o = cq.from(Order.class);
@@ -81,13 +115,13 @@ public class OrderRepository implements IOrderRepository {
 //        TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
 //        return query.getResultList();
 //    }
-public List<Order> findAllWithMemberDelivery() {
-    return em.createQuery(
-                    "select o from Order o" +
-                            " join fetch o.member m" +
-                            " join fetch o.delivery d", Order.class)
-            .getResultList();
-}
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .getResultList();
+    }
 
     public List<Order> findAllWithItem() {
         return em.createQuery(

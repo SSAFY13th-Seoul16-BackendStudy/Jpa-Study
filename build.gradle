@@ -17,6 +17,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -30,9 +31,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	// QueryDSL 의존성
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
@@ -44,4 +53,40 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// QueryDSL Q클래스 생성 경로 지정
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+// QueryDSL 소스 디렉토리 추가
+sourceSets {
+	main {
+		java {
+			srcDirs += [ querydslDir ]
+		}
+	}
+}
+
+// Q클래스 생성 태스크 (수정된 부분)
+tasks.register('generateQueryDSL', JavaCompile) {
+	source = sourceSets.main.java
+	classpath = configurations.compileClasspath
+	options.annotationProcessorPath = configurations.annotationProcessor
+	options.annotationProcessorGeneratedSourcesDirectory = querydslDir
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+	]
+	// 컴파일된 클래스 파일 출력 디렉토리 설정 추가
+	destinationDirectory = layout.buildDirectory.dir("tmp/querydsl-classes").get().asFile
+}
+
+// 자바 컴파일 전에 Q클래스 생성하도록 설정
+compileJava {
+	dependsOn generateQueryDSL
+}
+
+// 생성된 Q클래스 삭제 설정
+clean {
+	delete querydslDir
 }

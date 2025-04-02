@@ -2,9 +2,10 @@ package com.japStudy.ssafyStudy.repository;
 
 import com.japStudy.ssafyStudy.domain.Member;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IMemberRepository extends JpaRepository<Member, Long> {
-
+public interface IMemberRepositoryOld {
+    void save(Member member);
+    Member findOne(Long id);
+    List<Member> findAll();
     List<Member> findByName(String name);
 }

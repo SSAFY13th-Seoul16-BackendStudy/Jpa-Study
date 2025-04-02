@@ -26,7 +26,7 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId).get();
         Item item = itemRepository.findOne(itemId);
 
         Delivery delivery = new Delivery();
